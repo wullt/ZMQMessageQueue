@@ -14,7 +14,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description="ZMQ Message Queue Server")
 parser.add_argument(
-    "--config", type=str, default="configuration.yaml", help="config file"
+    "--config", type=str, default="config.yaml", help="config file"
 )
 args = parser.parse_args()
 
