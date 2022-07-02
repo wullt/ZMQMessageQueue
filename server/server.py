@@ -108,4 +108,4 @@ def results():
     return make_response(jsonify(result="ok"), 200)
 
 
-app.run(host="0.0.0.0", port=8080, debug=False)
+app.run(host=SRV_HOST, port=SRV_PORT, debug=False)
