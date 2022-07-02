@@ -1,0 +1,9 @@
+server:
+  host: 0.0.0.0
+  port: 8088
+  basic_auth_user: username
+  basic_auth_password: password
+
+zmq:
+  host: 0.0.0.0
+  port: 5556
