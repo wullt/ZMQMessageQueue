@@ -1,0 +1,9 @@
+subscriber:
+  host: localhost
+  port: 5556
+
+server:
+  host: "*"
+  port: 5557
+
+persisitent_directory: queue
