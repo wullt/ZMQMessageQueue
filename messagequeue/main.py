@@ -15,7 +15,7 @@ from zmq_helper import MessageStore, ThreadedSubscriber
 
 parser = argparse.ArgumentParser(description="ZMQ Message Queue")
 parser.add_argument(
-    "--config", type=str, default="configuration.yaml", help="config file"
+    "--config", type=str, default="config.yaml", help="config file"
 )
 args = parser.parse_args()
 # parse yaml configuration file
