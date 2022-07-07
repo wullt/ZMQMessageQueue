@@ -106,7 +106,7 @@ def flower_results():
     if not request.json:
         return make_response(jsonify(result="error"), 400)
     res = request.get_json()
-    print(json.dumps(res, indent=4))
+    #print(json.dumps(res, indent=4))
     mutex.acquire()
     transmit_results_zmq(json.dumps(res))
     mutex.release()
