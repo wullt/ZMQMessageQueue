@@ -11,6 +11,7 @@ import zmq.asyncio
 import threading
 import yaml
 import argparse
+from utils import get_path_filename, save_message
 
 parser = argparse.ArgumentParser(description="ZMQ Message Queue Server")
 parser.add_argument(
@@ -36,6 +37,7 @@ zmq_config = config.get("zmq")
 ZMQ_HOST = zmq_config.get("host")
 ZMQ_PORT = zmq_config.get("port")
 
+RESULT_SAVE_PATH = config.get("result_save_path")
 
 app = Flask(__name__)
 
@@ -89,23 +91,43 @@ def transmit_results_zmq(results):
         print("Error: unable to start thread")
 
 
+
+
 @auth.verify_password
 def verify_password(username, password):
     if username in users and check_password_hash(users.get(username), password):
         return username
 
 
-@app.route("/results", methods=["POST"])
+@app.route("/results/flower", methods=["POST"])
 @auth.login_required
-def results():
+def flower_results():
     # check if the post request has json data
     if not request.json:
         return make_response(jsonify(result="error"), 400)
     res = request.get_json()
+    print(json.dumps(res, indent=4))
     mutex.acquire()
     transmit_results_zmq(json.dumps(res))
     mutex.release()
     return make_response(jsonify(result="ok"), 200)
 
+@app.route("/results/pollinator", methods=["POST"])
+@auth.login_required
+def pollinator_results():
+    # check if the post request has json data
+    if not request.json:
+        return make_response(jsonify(result="error"), 400)
+    res = request.get_json()
+    """
+    print(json.dumps(res, indent=4))
+    mutex.acquire()
+    transmit_results_zmq(json.dumps(res))
+    mutex.release()
+    """
+    if save_message(res, RESULT_SAVE_PATH):
+        return make_response(jsonify(result="ok"), 200)
+    else:
+        return make_response(jsonify(result="error", description="Failed to store message."), 500)
 
 app.run(host=SRV_HOST, port=SRV_PORT, debug=False)
